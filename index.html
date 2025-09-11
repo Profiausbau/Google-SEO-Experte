@@ -6,6 +6,9 @@
   <meta name="description" content="SEO Experte Aachen – professionelle Suchmaschinenoptimierung für Unternehmen, Handwerker und Online-Shops. Mehr Sichtbarkeit bei Google, mehr Kunden.">
   <title>SEO Experte Aachen | Suchmaschinenoptimierung vom Profi</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
@@ -23,14 +26,15 @@
     </div>
   </header>
 
-  <!-- Hero mit Hintergrundbild -->
-  <section id="home" class="relative h-[70vh] bg-cover bg-center flex items-center justify-center text-white" style="background-image: url('images/seo-aachen.jpg');">
-    <div class="absolute inset-0 bg-black/60"></div> <!-- Overlay -->
-    <div class="relative z-10 text-center px-6">
+  <!-- Hero mit Gradient und Bild -->
+  <section id="home" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-28">
+    <div class="max-w-5xl mx-auto text-center px-6">
+      <img src="images/seo-aachen.jpg" alt="SEO Experte Aachen" class="mx-auto rounded-2xl shadow-lg mb-8 max-h-72 object-cover">
       <h2 class="text-5xl font-extrabold mb-6">SEO Experte Aachen</h2>
-      <p class="text-xl mb-8">Mehr Sichtbarkeit bei Google. Mehr Kunden. Nachhaltiges Wachstum durch SEO.</p>
-      <a href="#kontakt" class="bg-blue-600 text-white font-semibold px-8 py-4 rounded-2xl shadow-lg hover:bg-blue-700 transition">Jetzt beraten lassen</a>
+      <p class="text-xl mb-8">Mehr Sichtbarkeit bei Google. Mehr Kunden. Nachhaltiges Wachstum durch professionelle Suchmaschinenoptimierung.</p>
+      <a href="#kontakt" class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-2xl shadow-lg hover:bg-gray-100 transition">Jetzt beraten lassen</a>
     </div>
+    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gray-50"></div>
   </section>
 
   <!-- Leistungen -->
@@ -82,34 +86,28 @@
     </div>
   </section>
 
-<!-- Kontakt -->
-<section id="kontakt" class="py-20 bg-white">
-  <div class="max-w-4xl mx-auto px-6">
-    <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
-    <div class="bg-gray-50 shadow rounded-2xl p-8 space-y-6 text-center">
-      
-      <!-- Direkt-Kontakt -->
-      <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
-      <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
+  <!-- Kontakt -->
+  <section id="kontakt" class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
+      <div class="bg-gray-50 shadow rounded-2xl p-8 space-y-6 text-center">
+        <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
+        <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
 
-      <!-- Formular mit Formspree -->
-      <form action="https://formspree.io/f/xwpnzkbw" method="POST" class="mt-8 space-y-4">
-        <input type="text" name="name" placeholder="Ihr Name" required class="w-full p-3 border rounded-lg">
-        <input type="email" name="email" placeholder="Ihre E-Mail" required class="w-full p-3 border rounded-lg">
-        <textarea name="message" rows="5" placeholder="Ihre Nachricht" required class="w-full p-3 border rounded-lg"></textarea>
-        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
-          Absenden
-        </button>
-      </form>
+        <!-- Formular mit mailto -->
+        <form action="mailto:info@media-aachen.de" method="post" enctype="text/plain" class="mt-8 space-y-4">
+          <input type="text" name="Name" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
+          <input type="email" name="Email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
+          <textarea name="Nachricht" rows="5" placeholder="Ihre Nachricht" class="w-full p-3 border rounded-lg"></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Absenden</button>
+        </form>
 
-      <!-- Hinweis -->
-      <p class="text-sm text-gray-500 mt-4">
-        🔒 Ihre Daten werden sicher übertragen und nur zur Bearbeitung Ihrer Anfrage verwendet.
-      </p>
+        <p class="text-sm text-gray-500 mt-4">
+          🔒 Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage genutzt.
+        </p>
+      </div>
     </div>
-  </div>
-</section>
-
+  </section>
 
   <!-- Footer -->
   <footer class="bg-gray-900 text-white py-6 text-center">
