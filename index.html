@@ -6,6 +6,25 @@
   <meta name="description" content="SEO Experte Aachen – professionelle Suchmaschinenoptimierung für Unternehmen, lokale Betriebe und E-Commerce. Mehr Sichtbarkeit, mehr Kunden.">
   <title>SEO Experte Aachen | Suchmaschinenoptimierung vom Profi</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Structured Data: LocalBusiness -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "SEO Experte Aachen",
+    "image": "https://profiausbau.github.io/Google-SEO-Experte/seo-aachen.jpg",
+    "url": "https://profiausbau.github.io/Google-SEO-Experte/",
+    "telephone": "+49 173 5923748",
+    "email": "info@media-aachen.de",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Aachen",
+      "addressCountry": "DE"
+    },
+    "description": "SEO Experte in Aachen – Suchmaschinenoptimierung für Firmen, Handwerker und Online-Shops. Mehr Sichtbarkeit bei Google."
+  }
+  </script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
@@ -61,17 +80,23 @@
   <!-- Kontakt -->
   <section id="kontakt" class="py-20 max-w-4xl mx-auto px-6">
     <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
-    <form class="bg-white shadow rounded-2xl p-8 space-y-4">
-      <input type="text" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
-      <input type="email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
-      <textarea placeholder="Ihre Nachricht" rows="5" class="w-full p-3 border rounded-lg"></textarea>
-      <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">Absenden</button>
-    </form>
+    <div class="bg-white shadow rounded-2xl p-8 space-y-6 text-center">
+      <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
+      <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
+      <form class="mt-8 space-y-4">
+        <input type="text" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
+        <input type="email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
+        <textarea placeholder="Ihre Nachricht" rows="5" class="w-full p-3 border rounded-lg"></textarea>
+        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">Absenden</button>
+      </form>
+    </div>
   </section>
 
   <!-- Footer -->
   <footer class="bg-gray-900 text-white py-6 text-center">
     <p>© 2025 SEO Experte Aachen – Alle Rechte vorbehalten.</p>
+    <p><a href="tel:+491735923748" class="hover:underline">0173 5923748</a> | 
+       <a href="mailto:info@media-aachen.de" class="hover:underline">info@media-aachen.de</a></p>
   </footer>
 
 </body>
