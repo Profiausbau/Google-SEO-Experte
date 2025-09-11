@@ -3,73 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="SEO Experte Aachen – professionelle Suchmaschinenoptimierung für Unternehmen, lokale Betriebe und E-Commerce. Mehr Sichtbarkeit, mehr Kunden.">
+  <meta name="description" content="SEO Experte Aachen – professionelle Suchmaschinenoptimierung für Unternehmen, Handwerker und Online-Shops. Mehr Sichtbarkeit bei Google, mehr Kunden.">
   <title>SEO Experte Aachen | Suchmaschinenoptimierung vom Profi</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Structured Data: LocalBusiness -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "SEO Experte Aachen",
-    "image": "https://profiausbau.github.io/Google-SEO-Experte/seo-aachen.jpg",
-    "url": "https://profiausbau.github.io/Google-SEO-Experte/",
-    "telephone": "+49 173 5923748",
-    "email": "info@media-aachen.de",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Aachen",
-      "addressCountry": "DE"
-    },
-    "description": "SEO Experte in Aachen – Suchmaschinenoptimierung für Firmen, Handwerker und Online-Shops. Mehr Sichtbarkeit bei Google."
-  }
-  </script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gray-50 text-gray-800">
 
   <!-- Header -->
-  <header class="bg-white shadow">
+  <header class="bg-white shadow sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <h1 class="text-2xl font-bold text-blue-600">SEO Experte Aachen</h1>
-      <nav class="space-x-6">
+      <nav class="space-x-6 hidden md:block">
         <a href="#leistungen" class="hover:text-blue-600">Leistungen</a>
         <a href="#ueber" class="hover:text-blue-600">Über mich</a>
+        <a href="#seo-text" class="hover:text-blue-600">SEO Aachen</a>
         <a href="#kontakt" class="hover:text-blue-600">Kontakt</a>
       </nav>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="bg-blue-600 text-white py-20">
+  <!-- Hero -->
+  <section class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-28">
     <div class="max-w-4xl mx-auto text-center px-6">
-      <h2 class="text-4xl font-bold mb-4">Ihr SEO Experte in Aachen</h2>
-      <p class="text-lg mb-6">Mehr Sichtbarkeit bei Google. Mehr Kunden. Nachhaltiges Wachstum durch professionelle Suchmaschinenoptimierung.</p>
-      <a href="#kontakt" class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100">Jetzt beraten lassen</a>
+      <h2 class="text-5xl font-extrabold mb-6">Ihr SEO Experte in Aachen</h2>
+      <p class="text-xl mb-8">Mehr Sichtbarkeit bei Google. Mehr Kunden. Nachhaltiges Wachstum durch professionelle Suchmaschinenoptimierung.</p>
+      <a href="#kontakt" class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-2xl shadow-lg hover:bg-gray-100 transition">Kostenlose Erstberatung</a>
     </div>
+    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gray-50"></div>
   </section>
 
   <!-- Leistungen -->
-  <section id="leistungen" class="py-20 max-w-6xl mx-auto px-6">
-    <h3 class="text-3xl font-bold text-center mb-12">Meine SEO-Leistungen in Aachen</h3>
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="bg-white rounded-2xl shadow p-6">
-        <h4 class="text-xl font-semibold mb-2">OnPage Optimierung</h4>
-        <p>Optimierung von Struktur, Ladezeit, Content und Meta-Tags für bessere Rankings und Nutzererfahrung.</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow p-6">
-        <h4 class="text-xl font-semibold mb-2">Local SEO</h4>
-        <p>Mehr Sichtbarkeit in Aachen und Umgebung – Optimierung für Google Maps und lokale Suchergebnisse.</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow p-6">
-        <h4 class="text-xl font-semibold mb-2">Content & Backlinks</h4>
-        <p>Strategische Content-Erstellung und hochwertiger Linkaufbau für langfristige SEO-Erfolge.</p>
+  <section id="leistungen" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-12">Meine SEO-Leistungen in Aachen</h3>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
+          <svg class="w-12 h-12 mx-auto text-blue-600 mb-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m0-4h.01M12 12a9 9 0 100-18 9 9 0 000 18z"/></svg>
+          <h4 class="text-xl font-semibold mb-2">SEO Analyse & Beratung</h4>
+          <p>Umfassende Überprüfung Ihrer Website mit klaren Handlungsempfehlungen für bessere Rankings.</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
+          <svg class="w-12 h-12 mx-auto text-blue-600 mb-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7v4h18V7M5 7V3h14v4"/></svg>
+          <h4 class="text-xl font-semibold mb-2">OnPage Optimierung</h4>
+          <p>Struktur, Ladezeiten, Meta-Tags und Content werden gezielt optimiert, um Nutzer und Google zu überzeugen.</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
+          <svg class="w-12 h-12 mx-auto text-blue-600 mb-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-3-3h-2v5zM12 17h.01M12 12h.01M12 7h.01M7 20h5v-5H7v5zM7 9h5V4H7v5z"/></svg>
+          <h4 class="text-xl font-semibold mb-2">Local SEO Aachen</h4>
+          <p>Optimierung für Google Maps & lokale Suchbegriffe – perfekt für regionale Kunden und Sichtbarkeit.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Über mich -->
-  <section id="ueber" class="bg-gray-100 py-20">
+  <section id="ueber" class="bg-white py-20">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <h3 class="text-3xl font-bold mb-6">Über mich</h3>
       <p class="text-lg mb-4">Als SEO Experte mit langjähriger Erfahrung unterstütze ich Unternehmen in Aachen dabei, online erfolgreich zu werden. Mein Ansatz ist praxisnah, transparent und auf nachhaltige Ergebnisse ausgelegt.</p>
@@ -77,18 +71,60 @@
     </div>
   </section>
 
+  <!-- SEO Text -->
+  <section id="seo-text" class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-6">SEO Aachen – Suchmaschinenoptimierung vom Experten</h2>
+      <p class="mb-4">
+        Sichtbarkeit im Internet entscheidet heute über Erfolg oder Misserfolg. 
+        Als <strong>SEO Experte in Aachen</strong> helfe ich Ihnen dabei, Ihre Website so zu optimieren, 
+        dass sie von Ihrer Zielgruppe gefunden wird – nachhaltig, transparent und messbar.
+      </p>
+      <p class="mb-4">
+        Ohne <em>Suchmaschinenoptimierung</em> haben Webseiten kaum eine Chance, 
+        sich gegen die Konkurrenz durchzusetzen. 
+        Eine moderne Website reicht allein nicht aus – entscheidend ist, 
+        dass Inhalte, Technik und Nutzererfahrung aufeinander abgestimmt sind. 
+        Genau hier setzt meine Arbeit an.
+      </p>
+
+      <h3 class="text-2xl font-semibold mt-8 mb-4">Meine Leistungen im Bereich SEO Aachen</h3>
+      <ul class="list-disc list-inside space-y-2 mb-6">
+        <li><strong>SEO Analyse & Beratung</strong> – Technische & inhaltliche Prüfung Ihrer Website mit klaren Handlungsempfehlungen.</li>
+        <li><strong>OnPage Optimierung</strong> – Struktur, Ladezeiten, Meta-Tags, interne Verlinkungen und Content werden gezielt verbessert.</li>
+        <li><strong>Local SEO für Aachen</strong> – Bessere Platzierungen in Google Maps und lokalen Suchergebnissen, um Kunden aus der Region zu erreichen.</li>
+        <li><strong>Content & SEO Marketing</strong> – Erstellung und Optimierung von Texten, die sowohl Nutzer als auch Suchmaschinen überzeugen.</li>
+        <li><strong>Langfristige Betreuung</strong> – Regelmäßige Auswertungen, Anpassungen und kontinuierliche Optimierung für nachhaltigen Erfolg.</li>
+      </ul>
+
+      <p class="mb-4">
+        Mein Ziel ist es, Ihre Website zu einer der Top-Adressen bei Google & Co. zu machen. 
+        Statt kurzfristiger Tricks setze ich auf <strong>saubere Strategien</strong>, 
+        die Ihre Online-Sichtbarkeit dauerhaft stärken. 
+        So gewinnen Sie neue Kunden, steigern Ihren Umsatz und bauen Ihre Marke in Aachen erfolgreich aus.
+      </p>
+
+      <p class="font-semibold">
+        Vertrauen Sie auf Erfahrung, Transparenz und ein individuelles Konzept – 
+        kontaktieren Sie mich als Ihren SEO Experten in Aachen.
+      </p>
+    </div>
+  </section>
+
   <!-- Kontakt -->
-  <section id="kontakt" class="py-20 max-w-4xl mx-auto px-6">
-    <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
-    <div class="bg-white shadow rounded-2xl p-8 space-y-6 text-center">
-      <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
-      <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
-      <form class="mt-8 space-y-4">
-        <input type="text" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
-        <input type="email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
-        <textarea placeholder="Ihre Nachricht" rows="5" class="w-full p-3 border rounded-lg"></textarea>
-        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">Absenden</button>
-      </form>
+  <section id="kontakt" class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
+      <div class="bg-gray-50 shadow rounded-2xl p-8 space-y-6 text-center">
+        <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
+        <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
+        <form class="mt-8 space-y-4">
+          <input type="text" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
+          <input type="email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
+          <textarea placeholder="Ihre Nachricht" rows="5" class="w-full p-3 border rounded-lg"></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Absenden</button>
+        </form>
+      </div>
     </div>
   </section>
 
