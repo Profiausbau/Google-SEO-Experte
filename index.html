@@ -41,25 +41,6 @@
   </nav>
 </header>
 
-<!-- Meta-Checker Section -->
-<section id="metachecker" class="py-20 bg-gray-50">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="text-3xl font-bold mb-6">Meta-Checker Tool</h2>
-    <p class="mb-4">
-      Geben Sie eine URL ein, um die wichtigsten Meta-Daten zu überprüfen (Title, Description, H1).
-    </p>
-
-    <input type="text" id="urlInput" placeholder="https://example.com"
-           class="w-full p-3 border rounded-lg mb-4">
-    <button onclick="checkMeta()" 
-            class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
-      Check starten
-    </button>
-
-    <div id="result" class="mt-6 bg-white p-4 rounded-lg shadow"></div>
-  </div>
-</section>
-
 <script>
   const btn = document.getElementById("menu-btn");
   const menu = document.getElementById("mobile-menu");
@@ -77,35 +58,6 @@
       btn.textContent = "☰";
     });
   });
-
-  // Meta-Checker Funktion
-  async function checkMeta() {
-    const url = document.getElementById('urlInput').value;
-    const resultBox = document.getElementById('result');
-    resultBox.innerHTML = "⏳ Lade Daten...";
-
-    try {
-      const response = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
-      const data = await response.json();
-      const html = data.contents;
-
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-
-      const title = doc.querySelector("title")?.innerText || "❌ Kein Title gefunden";
-      const description = doc.querySelector("meta[name='description']")?.getAttribute("content") || "❌ Keine Description gefunden";
-      const h1 = doc.querySelector("h1")?.innerText || "❌ Kein H1 gefunden";
-
-      resultBox.innerHTML = `
-        <p><strong>Title:</strong> ${title}</p>
-        <p><strong>Description:</strong> ${description}</p>
-        <p><strong>H1:</strong> ${h1}</p>
-      `;
-    } catch (e) {
-      resultBox.innerHTML = "⚠️ Fehler beim Laden der URL.";
-    }
-  }
-</script>
 
 
   <!-- Hero mit Gradient und Bild -->
