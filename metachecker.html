@@ -2,9 +2,9 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+  <title>Meta-Checker | Media Aachen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Meta-Checker Tool – Überprüfen Sie Meta-Tags, SEO-Daten und Social Previews von Webseiten.">
-  <title>Meta-Checker | Media Aachen</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .spinner {
@@ -19,15 +19,12 @@
     @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
-
+<body class="bg-gray-50 text-gray-800 text-base">
   <!-- Header -->
   <header class="bg-white shadow sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <a href="index.html" class="text-2xl font-bold text-blue-600">SEO Experte Aachen</a>
-      <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
-        ⬅️ Zurück
-      </a>
+      <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">⬅️ Zurück</a>
     </div>
   </header>
 
@@ -73,7 +70,6 @@
   </footer>
 
   <script>
-    // Helferfunktionen
     function checkLength(text, min, max) {
       if (!text) return '<span class="text-red-600 font-semibold">❌ fehlt</span>';
       if (text.length < min) return `<span class="text-yellow-600 font-semibold">⚠️ zu kurz (${text.length} Zeichen)</span>`;
@@ -116,7 +112,6 @@
       }, 400);
     }
 
-    // Formular-Event
     document.getElementById("checker-form")?.addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("checkBtn");
@@ -144,12 +139,12 @@
           canonical: doc.querySelector("link[rel='canonical']")?.href || "",
           robots: doc.querySelector("meta[name='robots']")?.content || "",
           author: doc.querySelector("meta[name='author']")?.content || "",
-          ogImage: doc.querySelector("meta[property='og:image']")?.content || "",
           ogTitle: doc.querySelector("meta[property='og:title']")?.content || "",
           ogDescription: doc.querySelector("meta[property='og:description']")?.content || "",
-          twitterImage: doc.querySelector("meta[name='twitter:image']")?.content || "",
+          ogImage: doc.querySelector("meta[property='og:image']")?.content || "",
           twitterTitle: doc.querySelector("meta[name='twitter:title']")?.content || "",
           twitterDescription: doc.querySelector("meta[name='twitter:description']")?.content || "",
+          twitterImage: doc.querySelector("meta[name='twitter:image']")?.content || "",
           headings: {
             h1: [...doc.querySelectorAll("h1")].map(h => h.innerText),
             h2: [...doc.querySelectorAll("h2")].map(h => h.innerText),
@@ -158,24 +153,28 @@
           bold: [...doc.querySelectorAll("b,strong")].map(b => b.innerText)
         };
 
-        // Score
+        const h1Count = parsedData.headings.h1.length;
+        const h2Count = parsedData.headings.h2.length;
+        const h3Count = parsedData.headings.h3.length;
+        const boldCount = parsedData.bold.length;
+
         const seoScore = calculateSeoScore(parsedData);
         const circleRadius = 50;
         const circumference = 2 * Math.PI * circleRadius;
         const offset = circumference - (seoScore / 100) * circumference;
 
-        // Ergebnisse
         const results = `
           <div class="grid md:grid-cols-2 gap-6 mb-6">
             <div class="bg-white border-l-4 border-blue-600 shadow p-4">
               <h2 class="text-lg font-semibold mb-2">🔎 Struktur-Analyse</h2>
               <ul class="list-disc pl-6 space-y-1">
-                <li>${checkCount("H1", parsedData.headings.h1.length, 1, 1)}</li>
-                <li>${checkCount("H2", parsedData.headings.h2.length, 2, null)}</li>
-                <li>${checkCount("H3", parsedData.headings.h3.length, 1, null)}</li>
-                <li>${checkCount("Fette Wörter", parsedData.bold.length, 3, 15)}</li>
+                <li>${checkCount("H1", h1Count, 1, 1)}</li>
+                <li>${checkCount("H2", h2Count, 2, null)}</li>
+                <li>${checkCount("H3", h3Count, 1, null)}</li>
+                <li>${checkCount("Fette Wörter", boldCount, 3, 15)}</li>
               </ul>
             </div>
+
             <div class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center">
               <h2 class="text-lg font-bold mb-4">⭐ SEO Score</h2>
               <svg class="w-32 h-32 transform -rotate-90">
@@ -192,6 +191,7 @@
         `;
 
         document.getElementById("results").innerHTML = results;
+
         setTimeout(() => overlay.classList.add("hidden"), 500);
       } catch (err) {
         document.getElementById("results").innerHTML = `<p class="text-red-600 font-bold">❌ Fehler: ${err.message}</p>`;
