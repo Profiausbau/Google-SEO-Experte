@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Meta-Checker Tool – Überprüfen Sie Meta-Tags, SEO-Daten und Social Previews von Webseiten.">
+  <title>Meta-Checker | Media Aachen</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #2563eb;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- Header -->
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Logo zurück -->
+      <a href="index.html" class="text-2xl font-bold text-blue-600">SEO Experte Aachen</a>
+      <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+        ⬅️ Zurück
+      </a>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-5xl mx-auto py-12 px-6">
+    <h1 class="text-3xl sm:text-4xl font-bold mb-6 text-center">🔍 Meta-Checker Tool</h1>
+    <p class="text-center mb-8">Überprüfen Sie die wichtigsten SEO-Daten, Meta-Tags und Social Previews einer Webseite.</p>
+
+    <!-- Formular -->
+    <form id="checker-form" class="flex flex-col sm:flex-row gap-3 mb-8">
+      <input type="url" id="url" placeholder="https://example.com"
+        class="flex-1 border rounded-lg px-4 py-3 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-blue-600"
+        required>
+      <button type="submit" id="checkBtn"
+        class="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition disabled:opacity-70 disabled:cursor-not-allowed">
+        <span id="btnText">🚀 Prüfen</span>
+      </button>
+    </form>
+
+    <div id="results" class="space-y-10"></div>
+  </main>
+
+  <!-- Ladeoverlay -->
+  <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center hidden z-50">
+    <div id="overlayContent" class="bg-white rounded-lg shadow-lg p-6 flex flex-col items-center w-80">
+      <div class="spinner mb-3"></div>
+      <p class="text-gray-700 font-semibold mb-4">Wird geladen…</p>
+      <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+        <div id="progressBar" class="bg-blue-600 h-2 w-0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-6 mt-16">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+      <p>© 2025 SEO Experte Aachen – Alle Rechte vorbehalten.</p>
+      <div class="space-x-4">
+        <a href="impressum.html" class="hover:underline">Impressum</a>
+        <a href="datenschutz.html" class="hover:underline">Datenschutzerklärung</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function checkLength(text, min, max) {
+      if (!text) return '<span class="text-red-600 font-semibold">❌ fehlt</span>';
+      if (text.length < min) return `<span class="text-yellow-600 font-semibold">⚠️ zu kurz (${text.length} Zeichen)</span>`;
+      if (text.length > max) return `<span class="text-yellow-600 font-semibold">⚠️ zu lang (${text.length} Zeichen)</span>`;
+      return `<span class="text-green-600 font-semibold">✅ ok (${text.length} Zeichen)</span>`;
+    }
+
+    function checkCount(name, count, min, max) {
+      if (count === 0) return `<span class="text-red-600 font-semibold">❌ ${name} fehlt</span>`;
+      if (min !== null && count < min) return `<span class="text-yellow-600 font-semibold">⚠️ ${name} zu wenig (${count})</span>`;
+      if (max !== null && count > max) return `<span class="text-yellow-600 font-semibold">⚠️ ${name} zu viele (${count})</span>`;
+      return `<span class="text-green-600 font-semibold">✅ ${name} ok (${count})</span>`;
+    }
+
+    function calculateSeoScore(data) {
+      let score = 0;
+      let maxScore = 10;
+      if (data.title && data.title.length >= 10 && data.title.length <= 60) score++;
+      if (data.description && data.description.length >= 50 && data.description.length <= 160) score++;
+      if (data.ogImage) score++;
+      if (data.twitterImage) score++;
+      if (data.canonical) score++;
+      if (data.robots) score++;
+      if (data.author) score++;
+      if (data.headings?.h1?.length === 1) score++;
+      if ((data.headings?.h2?.length || 0) >= 2) score++;
+      if ((data.bold?.length || 0) >= 3 && (data.bold?.length || 0) <= 15) score++;
+      return Math.round((score / maxScore) * 100);
+    }
+
+    async function animateProgress() {
+      const bar = document.getElementById("progressBar");
+      if (!bar) return null;
+      bar.style.width = "0%";
+      let width = 0;
+      return setInterval(() => {
+        width += Math.random() * 15;
+        if (width >= 95) width = 95;
+        bar.style.width = width + "%";
+      }, 400);
+    }
+
+    document.getElementById("checker-form")?.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("checkBtn");
+      const btnText = document.getElementById("btnText");
+      const overlay = document.getElementById("loadingOverlay");
+      const url = document.getElementById("url").value;
+
+      btn.disabled = true;
+      btnText.textContent = "Prüfen...";
+      overlay.classList.remove("hidden");
+
+      let progressInterval = await animateProgress();
+
+      try {
+        const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+        const data = await res.json();
+        const html = data.contents;
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
+
+        const parsedData = {
+          title: doc.querySelector("title")?.innerText || "",
+          description: doc.querySelector("meta[name='description']")?.content || "",
+          canonical: doc.querySelector("link[rel='canonical']")?.href || "",
+          robots: doc.querySelector("meta[name='robots']")?.content || "",
+          author: doc.querySelector("meta[name='author']")?.content || "",
+          ogImage: doc.querySelector("meta[property='og:image']")?.content || "",
+          twitterImage: doc.querySelector("meta[name='twitter:image']")?.content || "",
+          headings: {
+            h1: [...doc.querySelectorAll("h1")].map(h => h.innerText),
+            h2: [...doc.querySelectorAll("h2")].map(h => h.innerText),
+            h3: [...doc.querySelectorAll("h3")].map(h => h.innerText),
+          },
+          bold: [...doc.querySelectorAll("b,strong")].map(b => b.innerText)
+        };
+
+        const seoScore = calculateSeoScore(parsedData);
+        const circleRadius = 50;
+        const circumference = 2 * Math.PI * circleRadius;
+        const offset = circumference - (seoScore / 100) * circumference;
+
+        const results = `
+          <div class="bg-white shadow rounded-lg p-6">
+            <h2 class="text-2xl font-bold mb-4">⭐ SEO Score</h2>
+            <svg class="w-32 h-32 transform -rotate-90 mx-auto mb-4">
+              <circle cx="64" cy="64" r="${circleRadius}" stroke="#e5e7eb" stroke-width="10" fill="none"/>
+              <circle cx="64" cy="64" r="${circleRadius}" stroke="${seoScore >= 80 ? '#16a34a' : seoScore >= 50 ? '#facc15' : '#dc2626'}"
+                stroke-width="10" fill="none"
+                stroke-dasharray="${circumference}"
+                stroke-dashoffset="${offset}"
+                stroke-linecap="round"/>
+            </svg>
+            <p class="text-center text-xl font-bold">${seoScore} / 100</p>
+          </div>
+        `;
+
+        document.getElementById("results").innerHTML = results;
+
+        setTimeout(() => overlay.classList.add("hidden"), 500);
+      } catch (err) {
+        document.getElementById("results").innerHTML = `<p class="text-red-600 font-bold">❌ Fehler: ${err.message}</p>`;
+        overlay.classList.add("hidden");
+      } finally {
+        btn.disabled = false;
+        btnText.textContent = "🚀 Prüfen";
+        if (progressInterval) clearInterval(progressInterval);
+      }
+    });
+  </script>
+</body>
+</html>
