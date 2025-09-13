@@ -69,35 +69,54 @@
   </footer>
 
 <script>
-function checkLength(text, min, max) {
-  if (!text) return '❌ fehlt';
-  if (text.length < min) return `⚠️ zu kurz (${text.length})`;
-  if (text.length > max) return `⚠️ zu lang (${text.length})`;
-  return `✅ ok (${text.length})`;
-}
-
-function checkCount(name, count, min, max) {
-  if (count === 0) return `❌ ${name} fehlt`;
-  if (min && count < min) return `⚠️ ${name} zu wenig (${count})`;
-  if (max && count > max) return `⚠️ ${name} zu viele (${count})`;
-  return `✅ ${name} ok (${count})`;
-}
-
 function calculateSeoScore(data) {
-  let score = 0, maxScore = 12;
-  if (data.title && data.title.length >= 10 && data.title.length <= 60) score++;
-  if (data.description && data.description.length >= 50 && data.description.length <= 160) score++;
-  if (data.ogImage) score++;
-  if (data.twitterImage) score++;
-  if (data.canonical) score++;
-  if (data.robots) score++;
-  if (data.author) score++;
-  if (data.h1.length === 1) score++;
-  if (data.h2.length >= 2) score++;
-  if (data.bold.length >= 3 && data.bold.length <= 15) score++;
-  if (data.images.total > 0 && data.images.withAlt === data.images.total) score++;
-  if (data.links.internal > 0) score++;
-  return Math.round((score / maxScore) * 100);
+  let score = 0, maxScore = 20;
+  let checks = [];
+
+  // --- Headings ---
+  if (data.h1.length === 1) { score++; checks.push("✅ H1 vorhanden"); }
+  else checks.push("❌ H1 fehlt oder mehrfach");
+
+  if (data.h2.length >= 2) { score++; checks.push("✅ H2 ausreichend"); }
+  else checks.push("⚠️ H2 zu wenig");
+
+  if (data.h3.length >= 1 && data.h3.length <= 10) { score++; checks.push("✅ H3 ok"); }
+  else checks.push("⚠️ H3 zu viele/wenige ("+data.h3.length+")");
+
+  // --- Title & Description ---
+  if (data.title && data.title.length >= 10 && data.title.length <= 60) { score++; checks.push("✅ Title-Länge ok"); }
+  else checks.push("⚠️ Title-Länge unpassend");
+
+  if (data.description && data.description.length >= 50 && data.description.length <= 160) { score++; checks.push("✅ Description-Länge ok"); }
+  else checks.push("⚠️ Description-Länge unpassend");
+
+  // --- Meta Tags ---
+  if (data.canonical) { score++; checks.push("✅ Canonical vorhanden"); } else checks.push("❌ Canonical fehlt");
+  if (data.robots) { score++; checks.push("✅ Robots vorhanden"); } else checks.push("❌ Robots fehlt");
+  if (data.author) { score++; checks.push("✅ Author vorhanden"); } else checks.push("❌ Author fehlt");
+
+  // --- Social Tags ---
+  if (data.ogImage) { score++; checks.push("✅ OG Image vorhanden"); } else checks.push("❌ OG Image fehlt");
+  if (data.twitterImage) { score++; checks.push("✅ Twitter Image vorhanden"); } else checks.push("❌ Twitter Image fehlt");
+
+  // --- Content ---
+  if (data.bold.length >= 3 && data.bold.length <= 20) { score++; checks.push("✅ Bold-Tags ok"); }
+  else checks.push("⚠️ Bold-Tags unpassend ("+data.bold.length+")");
+
+  if (data.wordCount > 300) { score++; checks.push("✅ Genug Text ("+data.wordCount+" Wörter)"); }
+  else checks.push("⚠️ Zu wenig Text ("+data.wordCount+" Wörter)");
+
+  if (data.images.total > 0 && data.images.withAlt === data.images.total) { score++; checks.push("✅ Alle Bilder mit ALT"); }
+  else checks.push("⚠️ Bilder ohne ALT");
+
+  // --- Links ---
+  if (data.links.internal > 5) { score++; checks.push("✅ Interne Links ok ("+data.links.internal+")"); }
+  else checks.push("⚠️ Zu wenige interne Links");
+
+  if (data.links.external >= 1) { score++; checks.push("✅ Externe Links ok ("+data.links.external+")"); }
+  else checks.push("⚠️ Keine externen Links");
+
+  return { score: Math.round((score / maxScore) * 100), checks };
 }
 
 async function animateProgress() {
@@ -144,57 +163,34 @@ document.getElementById("checker-form").addEventListener("submit", async (e) => 
       },
       links: {
         total: doc.querySelectorAll("a").length,
-        internal: [...doc.querySelectorAll("a")].filter(a => a.href.includes(location.hostname)).length,
-        external: [...doc.querySelectorAll("a")].filter(a => !a.href.includes(location.hostname)).length
+        internal: [...doc.querySelectorAll("a")].filter(a => new URL(a.href, url).hostname === new URL(url).hostname).length,
+        external: [...doc.querySelectorAll("a")].filter(a => new URL(a.href, url).hostname !== new URL(url).hostname).length
       },
       wordCount: doc.body.innerText.split(/\s+/).filter(w => w).length
     };
 
-    const seoScore = calculateSeoScore(parsed);
+    const {score, checks} = calculateSeoScore(parsed);
     const circleRadius = 50;
     const circumference = 2 * Math.PI * circleRadius;
-    const offset = circumference - (seoScore / 100) * circumference;
+    const offset = circumference - (score / 100) * circumference;
+    let color = score>=80 ? '#16a34a' : score>=50 ? '#facc15' : '#dc2626';
+    let textRating = score>=80 ? "✅ Sehr gut – nur wenige Optimierungen nötig" : score>=50 ? "⚠️ Mittel – es gibt Verbesserungsmöglichkeiten" : "❌ Schwach – viele Probleme";
 
     document.getElementById("results").innerHTML = `
       <section class="bg-white p-6 shadow rounded-lg">
         <h2 class="text-xl font-bold mb-4">⭐ SEO Score</h2>
-        <svg class="w-32 h-32 transform -rotate-90 mx-auto mb-4">
-          <circle cx="64" cy="64" r="${circleRadius}" stroke="#e5e7eb" stroke-width="10" fill="none"/>
-          <circle cx="64" cy="64" r="${circleRadius}" stroke="${seoScore>=80?'#16a34a':seoScore>=50?'#facc15':'#dc2626'}"
-            stroke-width="10" fill="none" stroke-dasharray="${circumference}"
-            stroke-dashoffset="${offset}" stroke-linecap="round"/>
-        </svg>
-        <p class="text-center text-lg font-bold">${seoScore} / 100</p>
-      </section>
-
-      <section class="bg-white p-6 shadow rounded-lg">
-        <h2 class="text-xl font-bold mb-4">🔎 Struktur-Analyse</h2>
-        <ul class="list-disc pl-6 space-y-1">
-          <li>${checkCount("H1", parsed.h1.length,1,1)}</li>
-          <li>${checkCount("H2", parsed.h2.length,2,null)}</li>
-          <li>${checkCount("H3", parsed.h3.length,1,null)}</li>
-          <li>${checkCount("Fette Wörter", parsed.bold.length,3,15)}</li>
-          <li>Bilder: ${parsed.images.withAlt}/${parsed.images.total} mit ALT</li>
-          <li>Wörter im Text: ${parsed.wordCount}</li>
+        <div class="flex flex-col items-center">
+          <svg class="w-32 h-32 transform -rotate-90 mb-4">
+            <circle cx="64" cy="64" r="${circleRadius}" stroke="#e5e7eb" stroke-width="10" fill="none"/>
+            <circle cx="64" cy="64" r="${circleRadius}" stroke="${color}" stroke-width="10" fill="none"
+              stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+          </svg>
+          <p class="text-2xl font-bold" style="color:${color}">${score} / 100</p>
+          <p class="text-gray-600">${textRating}</p>
+        </div>
+        <ul class="mt-6 space-y-2 text-sm">
+          ${checks.map(c => `<li>${c}</li>`).join("")}
         </ul>
-      </section>
-
-      <section class="bg-white p-6 shadow rounded-lg">
-        <h2 class="text-xl font-bold mb-4">📑 Meta-Daten</h2>
-        <p><b>Title:</b> ${parsed.title} (${checkLength(parsed.title,10,60)})</p>
-        <p><b>Description:</b> ${parsed.description} (${checkLength(parsed.description,50,160)})</p>
-        <p><b>Canonical:</b> ${parsed.canonical||"❌ fehlt"}</p>
-        <p><b>Robots:</b> ${parsed.robots||"❌ fehlt"}</p>
-        <p><b>Author:</b> ${parsed.author||"❌ fehlt"}</p>
-        <p><b>OG Image:</b> ${parsed.ogImage||"❌ fehlt"}</p>
-        <p><b>Twitter Image:</b> ${parsed.twitterImage||"❌ fehlt"}</p>
-      </section>
-
-      <section class="bg-white p-6 shadow rounded-lg">
-        <h2 class="text-xl font-bold mb-4">🔗 Links</h2>
-        <p>Insgesamt: ${parsed.links.total}</p>
-        <p>Intern: ${parsed.links.internal}</p>
-        <p>Extern: ${parsed.links.external}</p>
       </section>
     `;
 
@@ -209,37 +205,5 @@ document.getElementById("checker-form").addEventListener("submit", async (e) => 
   }
 });
 </script>
-
-  <!-- Cookie Banner -->
-<div id="cookie-banner" class="fixed bottom-0 inset-x-0 bg-gray-900 text-white p-4 z-50 shadow-lg hidden">
-  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-    <p class="text-sm">
-      🍪 Diese Website verwendet nur technisch notwendige Cookies, um die Funktionalität zu gewährleisten. 
-      Mehr Infos in unserer <a href="datenschutz.html" class="underline hover:text-blue-400">Datenschutzerklärung</a>.
-    </p>
-    <button id="cookie-accept" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">
-      Verstanden
-    </button>
-  </div>
-</div>
-
-<script>
-  // Cookie Banner Steuerung
-  document.addEventListener("DOMContentLoaded", function () {
-    const banner = document.getElementById("cookie-banner");
-    const acceptBtn = document.getElementById("cookie-accept");
-
-    // Prüfen ob schon akzeptiert
-    if (!localStorage.getItem("cookieAccepted")) {
-      banner.classList.remove("hidden");
-    }
-
-    acceptBtn.addEventListener("click", () => {
-      localStorage.setItem("cookieAccepted", "true");
-      banner.classList.add("hidden");
-    });
-  });
-</script>
-
 </body>
 </html>
