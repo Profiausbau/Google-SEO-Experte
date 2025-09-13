@@ -64,7 +64,8 @@
 
 <!-- Hero Section mit Bild und Block -->
 <section class="relative bg-cover bg-center bg-no-repeat h-[80vh] flex items-center"
-         style="background-image: url('images/seo-aachenbg.png');">
+         style="background-image: url('images/seo-aachenbg.png');"
+         role="img" aria-label="SEO Aachen Hintergrundbild">
 
   <div class="container mx-auto px-6">
     <div class="max-w-2xl bg-blue-800/90 text-white p-8 rounded-2xl shadow-lg">
@@ -88,10 +89,11 @@
   </div>
 </section>
 
+
 <!-- Leistungen -->
 <section id="leistungen" class="py-20 bg-gray-50">
   <div class="max-w-6xl mx-auto px-6">
-    <h3 class="text-3xl font-bold text-center mb-12">Meine SEO-Leistungen in Aachen</h3>
+    <h2 class="text-3xl font-bold text-center mb-12">Meine SEO-Leistungen in Aachen</h2>
     <div class="grid md:grid-cols-3 gap-8">
       <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
         <h4 class="text-xl font-semibold mb-2">SEO Analyse & Beratung</h4>
@@ -358,9 +360,13 @@
 
         <!-- Formular mit mailto -->
         <form action="mailto:info@media-aachen.de" method="post" enctype="text/plain" class="mt-8 space-y-4">
-          <input type="text" name="Name" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
-          <input type="email" name="Email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
-          <textarea name="Nachricht" rows="5" placeholder="Ihre Nachricht" class="w-full p-3 border rounded-lg"></textarea>
+          <label for="name" class="sr-only">Ihr Name</label>
+<input id="name" type="text" name="Name" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
+<label for="email" class="sr-only">Ihre E-Mail</label>
+<input id="email" type="email" name="Email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
+<label for="message" class="sr-only">Ihre Nachricht</label>
+<textarea id="message" name="Nachricht" rows="5" placeholder="Ihre Nachricht" class="w-full p-3 border rounded-lg"></textarea>
+
           <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Absenden</button>
         </form>
 
