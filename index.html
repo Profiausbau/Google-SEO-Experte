@@ -391,6 +391,36 @@
     </div>
   </footer>
 
+<!-- Cookie Banner -->
+<div id="cookie-banner" class="fixed bottom-0 inset-x-0 bg-gray-900 text-white p-4 z-50 shadow-lg hidden">
+  <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+    <p class="text-sm">
+      🍪 Diese Website verwendet nur technisch notwendige Cookies, um die Funktionalität zu gewährleisten. 
+      Mehr Infos in unserer <a href="datenschutz.html" class="underline hover:text-blue-400">Datenschutzerklärung</a>.
+    </p>
+    <button id="cookie-accept" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold">
+      Verstanden
+    </button>
+  </div>
+</div>
+
+<script>
+  // Cookie Banner Steuerung
+  document.addEventListener("DOMContentLoaded", function () {
+    const banner = document.getElementById("cookie-banner");
+    const acceptBtn = document.getElementById("cookie-accept");
+
+    // Prüfen ob schon akzeptiert
+    if (!localStorage.getItem("cookieAccepted")) {
+      banner.classList.remove("hidden");
+    }
+
+    acceptBtn.addEventListener("click", () => {
+      localStorage.setItem("cookieAccepted", "true");
+      banner.classList.add("hidden");
+    });
+  });
+</script>
 
 </body>
 </html>
