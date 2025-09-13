@@ -9,8 +9,6 @@
   <style>
     body { font-family: Arial, sans-serif; }
   </style>
-</head>
-<body>
 
 <!-- Header -->
 <header class="bg-white shadow sticky top-0 z-50">
@@ -24,7 +22,7 @@
       <a href="#leistungen" class="hover:text-blue-600">Leistungen</a>
       <a href="#ueber" class="hover:text-blue-600">Über mich</a>
       <a href="#seo-text" class="hover:text-blue-600">SEO Aachen</a>
-      <a href="metachecker.html" class="hover:text-blue-600">Meta-Checker</a>
+      <a href="#metachecker" class="hover:text-blue-600">Meta-Checker</a>
       <a href="#kontakt" class="hover:text-blue-600">Kontakt</a>
     </nav>
 
@@ -38,78 +36,186 @@
     <a href="#leistungen" class="block px-6 py-3 hover:bg-gray-50">Leistungen</a>
     <a href="#ueber" class="block px-6 py-3 hover:bg-gray-50">Über mich</a>
     <a href="#seo-text" class="block px-6 py-3 hover:bg-gray-50">SEO Aachen</a>
-    <a href="metachecker.html" class="block px-6 py-3 hover:bg-gray-50">Meta-Checker</a>
+    <a href="#metachecker" class="block px-6 py-3 hover:bg-gray-50">Meta-Checker</a>
     <a href="#kontakt" class="block px-6 py-3 hover:bg-gray-50">Kontakt</a>
   </nav>
 </header>
+
+<!-- Meta-Checker Section -->
+<section id="metachecker" class="py-20 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6">Meta-Checker Tool</h2>
+    <p class="mb-4">
+      Geben Sie eine URL ein, um die wichtigsten Meta-Daten zu überprüfen (Title, Description, H1).
+    </p>
+
+    <input type="text" id="urlInput" placeholder="https://example.com"
+           class="w-full p-3 border rounded-lg mb-4">
+    <button onclick="checkMeta()" 
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
+      Check starten
+    </button>
+
+    <div id="result" class="mt-6 bg-white p-4 rounded-lg shadow"></div>
+  </div>
+</section>
 
 <script>
   const btn = document.getElementById("menu-btn");
   const menu = document.getElementById("mobile-menu");
 
+  // Toggle Menü + Icon ändern
   btn.addEventListener("click", () => {
     menu.classList.toggle("hidden");
     btn.textContent = menu.classList.contains("hidden") ? "☰" : "✖";
   });
 
+  // Menü automatisch schließen, wenn Link geklickt wird
   document.querySelectorAll("#mobile-menu a").forEach(link => {
     link.addEventListener("click", () => {
       menu.classList.add("hidden");
       btn.textContent = "☰";
     });
   });
+
+  // Meta-Checker Funktion
+  async function checkMeta() {
+    const url = document.getElementById('urlInput').value;
+    const resultBox = document.getElementById('result');
+    resultBox.innerHTML = "⏳ Lade Daten...";
+
+    try {
+      const response = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+      const data = await response.json();
+      const html = data.contents;
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+
+      const title = doc.querySelector("title")?.innerText || "❌ Kein Title gefunden";
+      const description = doc.querySelector("meta[name='description']")?.getAttribute("content") || "❌ Keine Description gefunden";
+      const h1 = doc.querySelector("h1")?.innerText || "❌ Kein H1 gefunden";
+
+      resultBox.innerHTML = `
+        <p><strong>Title:</strong> ${title}</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p><strong>H1:</strong> ${h1}</p>
+      `;
+    } catch (e) {
+      resultBox.innerHTML = "⚠️ Fehler beim Laden der URL.";
+    }
+  }
 </script>
 
-<!-- Hero -->
-<section id="home" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-28">
-  <div class="max-w-5xl mx-auto text-center px-6">
-    <img src="images/seo-aachen.png" alt="SEO Experte Aachen" class="mx-auto rounded-2xl shadow-lg mb-8 max-h-72 object-cover">
-    <h2 class="text-5xl font-extrabold mb-6">SEO Experte Aachen</h2>
-    <p class="text-xl mb-8">Mehr Sichtbarkeit bei Google. Mehr Kunden. Nachhaltiges Wachstum durch professionelle Suchmaschinenoptimierung.</p>
-    <a href="#kontakt" class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-2xl shadow-lg hover:bg-gray-100 transition">Jetzt beraten lassen</a>
+
+  <!-- Hero mit Gradient und Bild -->
+  <section id="home" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-28">
+    <div class="max-w-5xl mx-auto text-center px-6">
+      <img src="images/seo-aachen.png" alt="SEO Experte Aachen" class="mx-auto rounded-2xl shadow-lg mb-8 max-h-72 object-cover">
+      <h2 class="text-5xl font-extrabold mb-6">SEO Experte Aachen</h2>
+      <p class="text-xl mb-8">Mehr Sichtbarkeit bei Google. Mehr Kunden. Nachhaltiges Wachstum durch professionelle Suchmaschinenoptimierung.</p>
+      <a href="#kontakt" class="bg-white text-blue-700 font-semibold px-8 py-4 rounded-2xl shadow-lg hover:bg-gray-100 transition">Jetzt beraten lassen</a>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 h-12 bg-gray-50"></div>
+  </section>
+
+  <!-- Meta-Checker Section -->
+<section id="metachecker" class="py-20 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-6">
+    <h2 class="text-3xl font-bold mb-6">Meta-Checker Tool</h2>
+    <p class="mb-4">
+      Geben Sie eine URL ein, um die wichtigsten Meta-Daten zu überprüfen (Title, Description, H1).
+    </p>
+
+    <input type="text" id="urlInput" placeholder="https://example.com"
+           class="w-full p-3 border rounded-lg mb-4">
+    <button onclick="checkMeta()" 
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700">
+      Check starten
+    </button>
+
+    <div id="result" class="mt-6 bg-white p-4 rounded-lg shadow"></div>
   </div>
-  <div class="absolute bottom-0 left-0 right-0 h-12 bg-gray-50"></div>
 </section>
 
-<!-- Leistungen -->
-<section id="leistungen" class="py-20 bg-gray-50">
-  <div class="max-w-6xl mx-auto px-6">
-    <h3 class="text-3xl font-bold text-center mb-12">Meine SEO-Leistungen in Aachen</h3>
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
-        <h4 class="text-xl font-semibold mb-2">SEO Analyse & Beratung</h4>
-        <p>Umfassende Überprüfung Ihrer Website mit klaren Handlungsempfehlungen für bessere Rankings.</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
-        <h4 class="text-xl font-semibold mb-2">OnPage Optimierung</h4>
-        <p>Struktur, Ladezeiten, Meta-Tags und Content werden gezielt optimiert, um Nutzer und Google zu überzeugen.</p>
-      </div>
-      <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
-        <h4 class="text-xl font-semibold mb-2">Local SEO Aachen</h4>
-        <p>Optimierung für Google Maps & lokale Suchbegriffe – perfekt für regionale Kunden und Sichtbarkeit.</p>
+<script>
+async function checkMeta() {
+  const url = document.getElementById('urlInput').value;
+  const resultBox = document.getElementById('result');
+  resultBox.innerHTML = "⏳ Lade Daten...";
+
+  try {
+    // Workaround mit AllOrigins Proxy, da Browser sonst CORS blockt
+    const response = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+    const data = await response.json();
+    const html = data.contents;
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const title = doc.querySelector("title")?.innerText || "❌ Kein Title gefunden";
+    const description = doc.querySelector("meta[name='description']")?.getAttribute("content") || "❌ Keine Description gefunden";
+    const h1 = doc.querySelector("h1")?.innerText || "❌ Kein H1 gefunden";
+
+    resultBox.innerHTML = `
+      <p><strong>Title:</strong> ${title}</p>
+      <p><strong>Description:</strong> ${description}</p>
+      <p><strong>H1:</strong> ${h1}</p>
+    `;
+  } catch (e) {
+    resultBox.innerHTML = "⚠️ Fehler beim Laden der URL.";
+  }
+}
+</script>
+
+  
+  <!-- Leistungen -->
+  <section id="leistungen" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-12">Meine SEO-Leistungen in Aachen</h3>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
+          <h4 class="text-xl font-semibold mb-2">SEO Analyse & Beratung</h4>
+          <p>Umfassende Überprüfung Ihrer Website mit klaren Handlungsempfehlungen für bessere Rankings.</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
+          <h4 class="text-xl font-semibold mb-2">OnPage Optimierung</h4>
+          <p>Struktur, Ladezeiten, Meta-Tags und Content werden gezielt optimiert, um Nutzer und Google zu überzeugen.</p>
+        </div>
+        <div class="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition">
+          <h4 class="text-xl font-semibold mb-2">Local SEO Aachen</h4>
+          <p>Optimierung für Google Maps & lokale Suchbegriffe – perfekt für regionale Kunden und Sichtbarkeit.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Über mich -->
-<section id="ueber" class="bg-white py-20">
-  <div class="max-w-4xl mx-auto px-6 text-center">
-    <h3 class="text-3xl font-bold mb-6">Über mich</h3>
-    <p class="text-lg mb-4">Als SEO Experte mit langjähriger Erfahrung unterstütze ich Unternehmen in Aachen dabei, online erfolgreich zu werden. Mein Ansatz ist praxisnah, transparent und auf nachhaltige Ergebnisse ausgelegt.</p>
-    <p>Ich kombiniere technisches SEO-Wissen mit Marketing-Know-how, um Ihnen messbare Erfolge zu liefern.</p>
-  </div>
-</section>
+  <!-- Über mich -->
+  <section id="ueber" class="bg-white py-20">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h3 class="text-3xl font-bold mb-6">Über mich</h3>
+      <p class="text-lg mb-4">Als SEO Experte mit langjähriger Erfahrung unterstütze ich Unternehmen in Aachen dabei, online erfolgreich zu werden. Mein Ansatz ist praxisnah, transparent und auf nachhaltige Ergebnisse ausgelegt.</p>
+      <p>Ich kombiniere technisches SEO-Wissen mit Marketing-Know-how, um Ihnen messbare Erfolge zu liefern.</p>
+    </div>
+  </section>
 
-<!-- Drupal Aachen -->
+  <!-- Drupal Aachen -->
 <section id="drupal" class="py-20 bg-white">
   <div class="max-w-6xl mx-auto px-6">
     <h2 class="text-3xl font-bold text-center mb-12">Leszek Damian Cieslok – Drupal Aachen</h2>
 
     <div class="bg-gray-50 shadow rounded-2xl p-8">
       <h3 class="text-2xl font-semibold mb-4">Drupal – Programmieren & Content-Management-System</h3>
-      <p class="mb-6">Drupal ist eines der besten Open-Source CMS, das sowohl für kleine Websites als auch für große Portale bestens geeignet ist. Dank unzähliger Zusatzmodule ist Drupal sehr flexibel und nahezu unendlich erweiterbar.</p>
-      <p class="mb-6">Um Inhalte Ihrer Website zu pflegen oder neue Seiten anzulegen, müssen Sie kein HTML-Experte sein. Dieses Content-Management-System ist einfach zu erlernen und zu bedienen.</p>
+      <p class="mb-6">
+        Drupal ist eines der besten Open-Source Content-Management-Systeme (CMS), 
+        das sowohl für kleine Websites als auch für große Portale bestens geeignet ist.  
+        Dank unzähliger Zusatzmodule ist Drupal sehr flexibel und nahezu unendlich erweiterbar. 
+        Sollte es spezielle Anforderungen geben, können eigene Module entwickelt werden.
+      </p>
+      <p class="mb-6">
+        Um Inhalte Ihrer Website zu pflegen oder neue Seiten anzulegen, müssen Sie kein HTML-Experte sein. 
+        Dieses Content-Management-System ist einfach zu erlernen und zu bedienen.
+      </p>
 
       <div class="grid md:grid-cols-2 gap-8">
         <div>
@@ -123,9 +229,26 @@
         <div>
           <h4 class="text-xl font-semibold mb-3">Design und Layout</h4>
           <ul class="list-disc pl-6 space-y-2">
-            <li>Neuentwicklung von Drupal Layouts (Themes)</li>
-            <li>Anpassung eines Drupal Themes an Ihr Corporate Design</li>
-            <li>Integration von Logo und Firmenfarben</li>
+            <li>Neuentwicklung von Drupal Layouts (Themes): Erstellung von Templates & Formatdateien</li>
+            <li>Installation und Anpassung eines Drupal Themes an Ihr Corporate Design</li>
+            <li>Integration von Logo und Firmenfarben in vorhandene Themes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8 mt-8">
+        <div>
+          <h4 class="text-xl font-semibold mb-3">Administration und Wartung</h4>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Backup von Drupal-Websites (Code und Datenbanken)</li>
+            <li>Aktualisierung des Drupal-Kerns und von Modulen</li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xl font-semibold mb-3">Suchmaschinenoptimierung & Support</h4>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Installation und Konfiguration von Modulen zur Suchmaschinenoptimierung</li>
+            <li>Beratung und Hilfe bei Fragestellungen rund um Drupal</li>
           </ul>
         </div>
       </div>
@@ -137,51 +260,81 @@
 <section id="seo-local" class="py-20 bg-white">
   <div class="max-w-5xl mx-auto px-6">
     <h2 class="text-3xl font-bold mb-6">Suchmaschinenoptimierung in Aachen</h2>
-    <p class="mb-4">Oft wird eine Google-Sucheingabe mit einem lokalen Bezug durch den Benutzer eingegeben. Neben dem Suchbegriff <strong>„Suchmaschinenoptimierung“</strong> wird gleichzeitig auch der Ort <strong>Aachen</strong> angegeben.</p>
-    <p class="mb-4">Vor diesem Hintergrund ist eine <strong>lokale Suchmaschinenoptimierung</strong> speziell auf den Standort Aachen unbedingt vorzunehmen.</p>
-    <p class="mb-4">Besonders vorteilhaft ist ein Domain-Name, der aus <em>Suchbegriff + Ortsangabe</em> besteht – zum Beispiel: <code class="bg-gray-100 px-2 py-1 rounded">Heiraten-Aachen.de</code>.</p>
+    <p class="mb-4">
+      Oft wird eine Google-Sucheingabe mit einem lokalen Bezug durch den Benutzer eingegeben. 
+      Neben dem eigentlichen Suchbegriff <strong>„Suchmaschinenoptimierung“</strong> 
+      wird gleichzeitig auch der Ort <strong>Aachen</strong> angegeben. 
+      Typische Beispiele sind: <em>Immobilien Aachen</em>, <em>Schule Aachen</em>, <em>Foto Aachen</em>, usw.
+    </p>
+    <p class="mb-4">
+      Vor diesem Hintergrund ist eine <strong>lokale Suchmaschinenoptimierung (SEO)</strong> 
+      oder auch <strong>Google-Optimierung</strong> speziell auf den Standort Städteregion bzw. Stadt Aachen 
+      unbedingt vorzunehmen. 
+    </p>
+    <p class="mb-4">
+      Der <strong>Name Ihrer Domain</strong> ist dabei von hoher Bedeutung für das Suchmaschinenranking 
+      und Google-Ranking. Besonders vorteilhaft ist ein Domain-Name, der 
+      aus <em>Suchbegriff + Ortsangabe</em> besteht – zum Beispiel: 
+      <code class="bg-gray-100 px-2 py-1 rounded">Heiraten-Aachen.de</code>.  
+      Dies signalisiert dem Besucher sofort ein passendes und relevantes Ergebnis in den Suchmaschinenergebnissen.
+    </p>
   </div>
 </section>
 
-<!-- SEO Text -->
-<section id="seo-text" class="py-20 bg-gray-50">
-  <div class="max-w-4xl mx-auto px-6">
-    <h2 class="text-3xl font-bold mb-6">SEO Aachen – Suchmaschinenoptimierung vom Experten</h2>
-    <p class="mb-4">Sichtbarkeit im Internet entscheidet heute über Erfolg oder Misserfolg. Als <strong>SEO Experte in Aachen</strong> helfe ich Ihnen dabei, Ihre Website so zu optimieren, dass sie von Ihrer Zielgruppe gefunden wird – nachhaltig, transparent und messbar.</p>
-    <p class="mb-4">Ohne <em>Suchmaschinenoptimierung</em> haben Webseiten kaum eine Chance, sich gegen die Konkurrenz durchzusetzen. Eine moderne Website reicht allein nicht aus – entscheidend ist, dass Inhalte, Technik und Nutzererfahrung aufeinander abgestimmt sind.</p>
-  </div>
-</section>
 
-<!-- Kontakt -->
-<section id="kontakt" class="py-20 bg-white">
-  <div class="max-w-4xl mx-auto px-6">
-    <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
-    <div class="bg-gray-50 shadow rounded-2xl p-8 space-y-6 text-center">
-      <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
-      <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
-
-      <form action="mailto:info@media-aachen.de" method="post" enctype="text/plain" class="mt-8 space-y-4">
-        <input type="text" name="Name" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
-        <input type="email" name="Email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
-        <textarea name="Nachricht" rows="5" placeholder="Ihre Nachricht" class="w-full p-3 border rounded-lg"></textarea>
-        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Absenden</button>
-      </form>
-
-      <p class="text-sm text-gray-500 mt-4">🔒 Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage genutzt.</p>
+  <!-- SEO Text -->
+  <section id="seo-text" class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-6">SEO Aachen – Suchmaschinenoptimierung vom Experten</h2>
+      <p class="mb-4">
+        Sichtbarkeit im Internet entscheidet heute über Erfolg oder Misserfolg. 
+        Als <strong>SEO Experte in Aachen</strong> helfe ich Ihnen dabei, Ihre Website so zu optimieren, 
+        dass sie von Ihrer Zielgruppe gefunden wird – nachhaltig, transparent und messbar.
+      </p>
+      <p class="mb-4">
+        Ohne <em>Suchmaschinenoptimierung</em> haben Webseiten kaum eine Chance, 
+        sich gegen die Konkurrenz durchzusetzen. 
+        Eine moderne Website reicht allein nicht aus – entscheidend ist, 
+        dass Inhalte, Technik und Nutzererfahrung aufeinander abgestimmt sind. 
+        Genau hier setzt meine Arbeit an.
+      </p>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Footer -->
-<footer class="bg-gray-900 text-white py-6">
-  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-    <p>© 2025 SEO Experte Aachen – Alle Rechte vorbehalten.</p>
-    <div class="space-x-4">
-      <a href="impressum.html" class="hover:underline">Impressum</a>
-      <a href="datenschutz.html" class="hover:underline">Datenschutzerklärung</a>
+  <!-- Kontakt -->
+  <section id="kontakt" class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-6">
+      <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
+      <div class="bg-gray-50 shadow rounded-2xl p-8 space-y-6 text-center">
+        <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
+        <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
+
+        <!-- Formular mit mailto -->
+        <form action="mailto:info@media-aachen.de" method="post" enctype="text/plain" class="mt-8 space-y-4">
+          <input type="text" name="Name" placeholder="Ihr Name" class="w-full p-3 border rounded-lg">
+          <input type="email" name="Email" placeholder="Ihre E-Mail" class="w-full p-3 border rounded-lg">
+          <textarea name="Nachricht" rows="5" placeholder="Ihre Nachricht" class="w-full p-3 border rounded-lg"></textarea>
+          <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">Absenden</button>
+        </form>
+
+        <p class="text-sm text-gray-500 mt-4">
+          🔒 Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage genutzt.
+        </p>
+      </div>
     </div>
-  </div>
-</footer>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-6">
+    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+      <p>© 2025 Seo Experte Aachen – Alle Rechte vorbehalten.</p>
+      <div class="space-x-4">
+        <a href="impressum.html" class="hover:underline">Impressum</a>
+        <a href="datenschutz.html" class="hover:underline">Datenschutzerklärung</a>
+      </div>
+    </div>
+  </footer>
+
 
 </body>
 </html>
