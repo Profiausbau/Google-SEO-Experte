@@ -2,13 +2,13 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>SEO Meta-Checker</title>
+  <title>Meta-Checker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .spinner {
       border: 3px solid #f3f3f3;
-      border-top: 3px solid #2563eb;
+      border-top: 3px solid #c62828;
       border-radius: 50%;
       width: 28px;
       height: 28px;
@@ -18,27 +18,26 @@
     @keyframes spin {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 text-base">
 
   <!-- Header -->
-  <header class="bg-white shadow sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-      <a href="index.html" class="text-2xl font-bold text-blue-600">SEO Experte Aachen</a>
-      <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">⬅️ Zurück</a>
+  <header class="bg-[#c62828] text-white shadow">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-lg sm:text-xl font-bold">🔍 Meta-Checker</h1>
+      <a href="/" class="bg-white text-[#c62828] px-4 py-2 rounded-full font-semibold shadow hover:bg-gray-100">⬅️ Zurück</a>
     </div>
   </header>
 
   <!-- Main -->
-  <main class="max-w-6xl mx-auto py-12 px-6">
-    <h1 class="text-3xl sm:text-4xl font-bold mb-6 text-center">🔍 SEO Meta-Checker</h1>
-    <p class="text-center mb-8">Überprüfen Sie Meta-Tags, Struktur, Inhalte und Social Previews einer Webseite.</p>
+  <main class="max-w-5xl mx-auto py-8 px-4">
+    <h1 class="text-2xl sm:text-3xl font-bold mb-6">Meta-Tags Checker</h1>
 
     <!-- Formular -->
     <form id="checker-form" class="flex flex-col sm:flex-row gap-3 mb-8">
       <input type="url" id="url" placeholder="https://example.com"
-        class="flex-1 border rounded-lg px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+        class="flex-1 border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-[#c62828]" required>
       <button type="submit" id="checkBtn"
-        class="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
+        class="bg-[#c62828] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#a81f1f] transition disabled:opacity-70">
         <span id="btnText">🚀 Prüfen</span>
       </button>
     </form>
@@ -52,73 +51,51 @@
       <div class="spinner mb-3"></div>
       <p class="text-gray-700 font-semibold mb-4">Wird geladen…</p>
       <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-        <div id="progressBar" class="bg-blue-600 h-2 w-0"></div>
+        <div id="progressBar" class="bg-[#c62828] h-2 w-0"></div>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-white py-6 mt-16">
-    <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
-      <p>© 2025 SEO Experte Aachen – Alle Rechte vorbehalten.</p>
-      <div class="space-x-4">
-        <a href="impressum.html" class="hover:underline">Impressum</a>
-        <a href="datenschutz.html" class="hover:underline">Datenschutzerklärung</a>
-      </div>
-    </div>
-  </footer>
-
 <script>
+// Hilfsfunktionen
+function checkLength(text, min, max) {
+  if (!text) return '❌ fehlt';
+  if (text.length < min) return `⚠️ zu kurz (${text.length})`;
+  if (text.length > max) return `⚠️ zu lang (${text.length})`;
+  return `✅ ok (${text.length})`;
+}
+function checkCount(name, count, min, max) {
+  if (count === 0) return `❌ ${name} fehlt`;
+  if (min && count < min) return `⚠️ ${name} zu wenig (${count})`;
+  if (max && count > max) return `⚠️ ${name} zu viele (${count})`;
+  return `✅ ${name} ok (${count})`;
+}
+function copyMeta() {
+  const code = document.getElementById("metaCode");
+  if (code) {
+    navigator.clipboard.writeText(code.innerText);
+    alert("Meta-Tags kopiert!");
+  }
+}
 function calculateSeoScore(data) {
   let score = 0, maxScore = 20;
-  let checks = [];
-
-  // --- Headings ---
-  if (data.h1.length === 1) { score++; checks.push("✅ H1 vorhanden"); }
-  else checks.push("❌ H1 fehlt oder mehrfach");
-
-  if (data.h2.length >= 2) { score++; checks.push("✅ H2 ausreichend"); }
-  else checks.push("⚠️ H2 zu wenig");
-
-  if (data.h3.length >= 1 && data.h3.length <= 10) { score++; checks.push("✅ H3 ok"); }
-  else checks.push("⚠️ H3 zu viele/wenige ("+data.h3.length+")");
-
-  // --- Title & Description ---
-  if (data.title && data.title.length >= 10 && data.title.length <= 60) { score++; checks.push("✅ Title-Länge ok"); }
-  else checks.push("⚠️ Title-Länge unpassend");
-
-  if (data.description && data.description.length >= 50 && data.description.length <= 160) { score++; checks.push("✅ Description-Länge ok"); }
-  else checks.push("⚠️ Description-Länge unpassend");
-
-  // --- Meta Tags ---
-  if (data.canonical) { score++; checks.push("✅ Canonical vorhanden"); } else checks.push("❌ Canonical fehlt");
-  if (data.robots) { score++; checks.push("✅ Robots vorhanden"); } else checks.push("❌ Robots fehlt");
-  if (data.author) { score++; checks.push("✅ Author vorhanden"); } else checks.push("❌ Author fehlt");
-
-  // --- Social Tags ---
-  if (data.ogImage) { score++; checks.push("✅ OG Image vorhanden"); } else checks.push("❌ OG Image fehlt");
-  if (data.twitterImage) { score++; checks.push("✅ Twitter Image vorhanden"); } else checks.push("❌ Twitter Image fehlt");
-
-  // --- Content ---
-  if (data.bold.length >= 3 && data.bold.length <= 20) { score++; checks.push("✅ Bold-Tags ok"); }
-  else checks.push("⚠️ Bold-Tags unpassend ("+data.bold.length+")");
-
-  if (data.wordCount > 300) { score++; checks.push("✅ Genug Text ("+data.wordCount+" Wörter)"); }
-  else checks.push("⚠️ Zu wenig Text ("+data.wordCount+" Wörter)");
-
-  if (data.images.total > 0 && data.images.withAlt === data.images.total) { score++; checks.push("✅ Alle Bilder mit ALT"); }
-  else checks.push("⚠️ Bilder ohne ALT");
-
-  // --- Links ---
-  if (data.links.internal > 5) { score++; checks.push("✅ Interne Links ok ("+data.links.internal+")"); }
-  else checks.push("⚠️ Zu wenige interne Links");
-
-  if (data.links.external >= 1) { score++; checks.push("✅ Externe Links ok ("+data.links.external+")"); }
-  else checks.push("⚠️ Keine externen Links");
-
-  return { score: Math.round((score / maxScore) * 100), checks };
+  if (data.h1.length === 1) score++;
+  if (data.h2.length >= 2) score++;
+  if (data.h3.length >= 1 && data.h3.length <= 25) score++; // flexibler
+  if (data.title && data.title.length >= 10 && data.title.length <= 60) score++;
+  if (data.description && data.description.length >= 50 && data.description.length <= 160) score++;
+  if (data.canonical) score++;
+  if (data.robots) score++;
+  if (data.author) score++;
+  if (data.ogImage) score++;
+  if (data.twitterImage) score++;
+  if (data.bold.length >= 3 && data.bold.length <= 20) score++;
+  if (data.wordCount > 300) score++;
+  if (data.images.total > 0 && data.images.withAlt === data.images.total) score++;
+  if (data.links.internal > 5) score++;
+  if (data.links.external >= 1) score++;
+  return Math.round((score / maxScore) * 100);
 }
-
 async function animateProgress() {
   const bar = document.getElementById("progressBar");
   let width = 0;
@@ -129,52 +106,24 @@ async function animateProgress() {
   }, 400);
 }
 
+// Event: Formular
 document.getElementById("checker-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const url = document.getElementById("url").value;
   const overlay = document.getElementById("loadingOverlay");
-  const btn = document.getElementById("checkBtn");
-  const btnText = document.getElementById("btnText");
   overlay.classList.remove("hidden");
-  btn.disabled = true;
-  btnText.textContent = "Prüfen...";
   let progressInterval = await animateProgress();
 
   try {
-    const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+    // === Backend-Variante ===
+    const res = await fetch(`/meta-checker/api/check?url=${encodeURIComponent(url)}`);
     const data = await res.json();
-    const doc = new DOMParser().parseFromString(data.contents, "text/html");
 
-    const parsed = {
-      title: doc.querySelector("title")?.innerText || "",
-      description: doc.querySelector("meta[name='description']")?.content || "",
-      canonical: doc.querySelector("link[rel='canonical']")?.href || "",
-      robots: doc.querySelector("meta[name='robots']")?.content || "",
-      author: doc.querySelector("meta[name='author']")?.content || "",
-      ogImage: doc.querySelector("meta[property='og:image']")?.content || "",
-      twitterImage: doc.querySelector("meta[name='twitter:image']")?.content || "",
-      h1: [...doc.querySelectorAll("h1")].map(h => h.innerText),
-      h2: [...doc.querySelectorAll("h2")].map(h => h.innerText),
-      h3: [...doc.querySelectorAll("h3")].map(h => h.innerText),
-      bold: [...doc.querySelectorAll("b,strong")].map(b => b.innerText),
-      images: {
-        total: doc.querySelectorAll("img").length,
-        withAlt: [...doc.querySelectorAll("img")].filter(i => i.alt).length
-      },
-      links: {
-        total: doc.querySelectorAll("a").length,
-        internal: [...doc.querySelectorAll("a")].filter(a => new URL(a.href, url).hostname === new URL(url).hostname).length,
-        external: [...doc.querySelectorAll("a")].filter(a => new URL(a.href, url).hostname !== new URL(url).hostname).length
-      },
-      wordCount: doc.body.innerText.split(/\s+/).filter(w => w).length
-    };
-
-    const {score, checks} = calculateSeoScore(parsed);
+    const seoScore = calculateSeoScore(data);
     const circleRadius = 50;
     const circumference = 2 * Math.PI * circleRadius;
-    const offset = circumference - (score / 100) * circumference;
-    let color = score>=80 ? '#16a34a' : score>=50 ? '#facc15' : '#dc2626';
-    let textRating = score>=80 ? "✅ Sehr gut – nur wenige Optimierungen nötig" : score>=50 ? "⚠️ Mittel – es gibt Verbesserungsmöglichkeiten" : "❌ Schwach – viele Probleme";
+    const offset = circumference - (seoScore / 100) * circumference;
+    const color = seoScore>=80 ? '#16a34a' : seoScore>=50 ? '#facc15' : '#dc2626';
 
     document.getElementById("results").innerHTML = `
       <section class="bg-white p-6 shadow rounded-lg">
@@ -185,23 +134,76 @@ document.getElementById("checker-form").addEventListener("submit", async (e) => 
             <circle cx="64" cy="64" r="${circleRadius}" stroke="${color}" stroke-width="10" fill="none"
               stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
           </svg>
-          <p class="text-2xl font-bold" style="color:${color}">${score} / 100</p>
-          <p class="text-gray-600">${textRating}</p>
+          <p class="text-2xl font-bold" style="color:${color}">${seoScore} / 100</p>
         </div>
-        <ul class="mt-6 space-y-2 text-sm">
-          ${checks.map(c => `<li>${c}</li>`).join("")}
+      </section>
+
+      <section class="bg-white p-6 shadow rounded-lg">
+        <h2 class="text-xl font-bold mb-4">🔎 Struktur-Analyse</h2>
+        <ul class="list-disc pl-6 space-y-1">
+          <li>${checkCount("H1", data.h1.length,1,1)}</li>
+          <li>${checkCount("H2", data.h2.length,2,null)}</li>
+          <li>${checkCount("H3", data.h3.length,1,25)}</li>
+          <li>${checkCount("Fette Wörter", data.bold.length,3,20)}</li>
+          <li>Bilder: ${data.images.withAlt}/${data.images.total} mit ALT</li>
+          <li>Wörter im Text: ${data.wordCount}</li>
         </ul>
+      </section>
+
+      <section class="bg-white p-6 shadow rounded-lg">
+        <h2 class="text-xl font-bold mb-4">📑 Meta-Daten</h2>
+        <p><b>Title:</b> ${data.title} (${checkLength(data.title,10,60)})</p>
+        <p><b>Description:</b> ${data.description} (${checkLength(data.description,50,160)})</p>
+        <p><b>Canonical:</b> ${data.canonical||"❌ fehlt"}</p>
+        <p><b>Robots:</b> ${data.robots||"❌ fehlt"}</p>
+        <p><b>Author:</b> ${data.author||"❌ fehlt"}</p>
+        <p><b>OG Image:</b> ${data.ogImage||"❌ fehlt"}</p>
+        <p><b>Twitter Image:</b> ${data.twitterImage||"❌ fehlt"}</p>
+      </section>
+
+      <section class="bg-white p-6 shadow rounded-lg">
+        <h2 class="text-xl font-bold mb-4">📱 Social Preview</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="border rounded shadow p-3">
+            <h3 class="font-semibold mb-2">Facebook / LinkedIn</h3>
+            <img src="${data.ogImage||'https://via.placeholder.com/200x120'}" class="mb-2"/>
+            <p class="font-bold">${data.ogTitle||data.title||'Kein Titel'}</p>
+            <p>${data.ogDescription||data.description||'Keine Beschreibung'}</p>
+          </div>
+          <div class="border rounded shadow p-3">
+            <h3 class="font-semibold mb-2">Twitter / X</h3>
+            <img src="${data.twitterImage||'https://via.placeholder.com/200x120'}" class="mb-2"/>
+            <p class="font-bold">${data.twitterTitle||data.title||'Kein Titel'}</p>
+            <p>${data.twitterDescription||data.description||'Keine Beschreibung'}</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-bold mt-6 mb-2">📋 Use your Meta-Tags</h2>
+        <pre id="metaCode" class="bg-gray-100 p-4 rounded">${`
+<title>${data.title||''}</title>
+<meta name="description" content="${data.description||''}">
+<meta property="og:title" content="${data.ogTitle||data.title||''}">
+<meta property="og:description" content="${data.ogDescription||data.description||''}">
+<meta property="og:image" content="${data.ogImage||''}">
+<meta name="twitter:title" content="${data.twitterTitle||data.title||''}">
+<meta name="twitter:description" content="${data.twitterDescription||data.description||''}">
+<meta name="twitter:image" content="${data.twitterImage||''}">
+<link rel="canonical" href="${data.canonical||url}">
+<meta name="robots" content="${data.robots||''}">
+<meta name="author" content="${data.author||''}">
+        `}</pre>
+        <button onclick="copyMeta()" class="mt-2 bg-[#c62828] text-white px-4 py-2 rounded">📋 Kopieren</button>
       </section>
     `;
 
-    setTimeout(()=>overlay.classList.add("hidden"),500);
+    overlay.classList.add("hidden");
   } catch (err) {
     document.getElementById("results").innerHTML = `<p class="text-red-600">❌ Fehler: ${err.message}</p>`;
     overlay.classList.add("hidden");
   } finally {
     clearInterval(progressInterval);
-    btn.disabled = false;
-    btnText.textContent = "🚀 Prüfen";
   }
 });
 </script>
