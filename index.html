@@ -11,24 +11,50 @@
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
+<header class="bg-white shadow sticky top-0 z-50">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <h1 class="text-2xl font-bold text-blue-600">SEO Experte Aachen</h1>
 
-  <!-- Header -->
-  <header class="bg-white shadow sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-blue-600">SEO Experte Aachen</h1>
-   <nav class="space-x-6 hidden md:block">
-  <a href="#home" class="hover:text-blue-600">Home</a>
-  <a href="#leistungen" class="hover:text-blue-600">Leistungen</a>
-  <a href="#ueber" class="hover:text-blue-600">Über mich</a>
-  <a href="#drupal" class="hover:text-blue-600">Drupal Aachen</a>
-  <a href="#seo-text" class="hover:text-blue-600">SEO Aachen</a>
-  <a href="#seo-local" class="hover:text-blue-600">SEO lokal Aachen</a>
-  <a href="#kontakt" class="hover:text-blue-600">Kontakt</a>
-</nav>
+    <!-- Desktop Nav -->
+    <nav class="space-x-6 hidden md:block">
+      <a href="#home" class="hover:text-blue-600">Home</a>
+      <a href="#leistungen" class="hover:text-blue-600">Leistungen</a>
+      <a href="#ueber" class="hover:text-blue-600">Über mich</a>
+      <a href="#drupal" class="hover:text-blue-600">Drupal Aachen</a>
+      <a href="#seo-text" class="hover:text-blue-600">SEO Aachen</a>
+      <a href="#seo-local" class="hover:text-blue-600">SEO lokal Aachen</a>
+      <a href="#kontakt" class="hover:text-blue-600">Kontakt</a>
+    </nav>
 
+    <!-- Mobile Button -->
+    <button id="menu-btn" class="md:hidden text-gray-700 focus:outline-none">
+      ☰
+    </button>
+  </div>
 
-    </div>
-  </header>
+  <!-- Mobile Nav -->
+  <nav id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+    <a href="#home" class="block px-6 py-3 hover:bg-gray-50">Home</a>
+    <a href="#leistungen" class="block px-6 py-3 hover:bg-gray-50">Leistungen</a>
+    <a href="#ueber" class="block px-6 py-3 hover:bg-gray-50">Über mich</a>
+    <a href="#drupal" class="block px-6 py-3 hover:bg-gray-50">Drupal Aachen</a>
+    <a href="#seo-text" class="block px-6 py-3 hover:bg-gray-50">SEO Aachen</a>
+    <a href="#seo-local" class="block px-6 py-3 hover:bg-gray-50">SEO lokal Aachen</a>
+    <a href="#kontakt" class="block px-6 py-3 hover:bg-gray-50">Kontakt</a>
+  </nav>
+</header>
+
+<!-- Script -->
+<script>
+  const btn = document.getElementById("menu-btn");
+  const menu = document.getElementById("mobile-menu");
+
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>
+
 
   <!-- Hero mit Gradient und Bild -->
   <section id="home" class="relative bg-gradient-to-r from-blue-600 to-blue-800 text-white py-28">
