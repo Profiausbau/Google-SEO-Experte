@@ -2,9 +2,8 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Meta-Checker | Media Aachen</title>
+  <title>Meta-Checker Tool</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Meta-Checker Tool – Überprüfen Sie Meta-Tags, SEO-Daten und Social Previews von Webseiten.">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .spinner {
@@ -16,15 +15,21 @@
       animation: spin 0.8s linear infinite;
       display: inline-block;
     }
-    @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+    @keyframes spin { 
+      0% {transform: rotate(0deg);} 
+      100% {transform: rotate(360deg);} 
+    }
   </style>
 </head>
-<body class="bg-gray-50 text-gray-800 text-base">
+<body class="bg-gray-50 text-gray-800">
+
   <!-- Header -->
   <header class="bg-white shadow sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
       <a href="index.html" class="text-2xl font-bold text-blue-600">SEO Experte Aachen</a>
-      <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">⬅️ Zurück</a>
+      <a href="index.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition">
+        ⬅️ Zurück
+      </a>
     </div>
   </header>
 
@@ -70,6 +75,7 @@
   </footer>
 
   <script>
+    // Hilfsfunktionen
     function checkLength(text, min, max) {
       if (!text) return '<span class="text-red-600 font-semibold">❌ fehlt</span>';
       if (text.length < min) return `<span class="text-yellow-600 font-semibold">⚠️ zu kurz (${text.length} Zeichen)</span>`;
@@ -112,6 +118,7 @@
       }, 400);
     }
 
+    // Formular-Event
     document.getElementById("checker-form")?.addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("checkBtn");
@@ -136,6 +143,7 @@
         const parsedData = {
           title: doc.querySelector("title")?.innerText || "",
           description: doc.querySelector("meta[name='description']")?.content || "",
+          keywords: doc.querySelector("meta[name='keywords']")?.content || "",
           canonical: doc.querySelector("link[rel='canonical']")?.href || "",
           robots: doc.querySelector("meta[name='robots']")?.content || "",
           author: doc.querySelector("meta[name='author']")?.content || "",
@@ -163,7 +171,9 @@
         const circumference = 2 * Math.PI * circleRadius;
         const offset = circumference - (seoScore / 100) * circumference;
 
-        const results = `
+        // Ergebnisse
+        document.getElementById("results").innerHTML = `
+          <!-- Struktur & Score -->
           <div class="grid md:grid-cols-2 gap-6 mb-6">
             <div class="bg-white border-l-4 border-blue-600 shadow p-4">
               <h2 class="text-lg font-semibold mb-2">🔎 Struktur-Analyse</h2>
@@ -174,7 +184,6 @@
                 <li>${checkCount("Fette Wörter", boldCount, 3, 15)}</li>
               </ul>
             </div>
-
             <div class="bg-white shadow rounded-lg p-6 flex flex-col items-center justify-center">
               <h2 class="text-lg font-bold mb-4">⭐ SEO Score</h2>
               <svg class="w-32 h-32 transform -rotate-90">
@@ -188,9 +197,44 @@
               <p class="text-xl font-bold mt-2">${seoScore} / 100</p>
             </div>
           </div>
-        `;
 
-        document.getElementById("results").innerHTML = results;
+          <!-- Gefundene Elemente -->
+          <div class="bg-gray-50 border rounded-lg p-4 mb-6">
+            <h3 class="font-semibold mb-2">📋 Gefundene Elemente</h3>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+              <div><p class="font-bold">H1 (${h1Count}):</p><ul class="list-disc pl-5">${parsedData.headings.h1.map(h=>`<li>${h}</li>`).join("")||"<li>❌ keine</li>"}</ul></div>
+              <div><p class="font-bold">H2 (${h2Count}):</p><ul class="list-disc pl-5">${parsedData.headings.h2.map(h=>`<li>${h}</li>`).join("")||"<li>❌ keine</li>"}</ul></div>
+              <div><p class="font-bold">H3 (${h3Count}):</p><ul class="list-disc pl-5">${parsedData.headings.h3.map(h=>`<li>${h}</li>`).join("")||"<li>❌ keine</li>"}</ul></div>
+              <div><p class="font-bold">Fette Wörter (${boldCount}):</p><ul class="list-disc pl-5">${parsedData.bold.map(b=>`<li>${b}</li>`).join("")||"<li>❌ keine</li>"}</ul></div>
+            </div>
+          </div>
+
+          <!-- Social Preview -->
+          <section>
+            <h2 class="text-2xl font-semibold mb-4">📱 Social Preview</h2>
+            <div class="grid grid-cols-12 border rounded-lg shadow bg-white overflow-hidden mb-6">
+              <div class="col-span-4"><img src="${parsedData.ogImage||'https://via.placeholder.com/200x120?text=Kein+Bild'}" class="w-full h-full object-cover"></div>
+              <div class="col-span-8 p-4">
+                <p class="text-lg font-bold">${parsedData.ogTitle||parsedData.title||"Kein Titel"}</p>
+                <p class="text-sm text-gray-600">${parsedData.ogDescription||parsedData.description||"Keine Beschreibung"}</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Meta Tabelle -->
+          <section>
+            <h2 class="text-2xl font-semibold mt-10 mb-4">📑 Meta-Daten</h2>
+            <table class="min-w-full text-sm border">
+              <tbody>
+                <tr><td class="px-2 py-1 bg-gray-50">title</td><td>${parsedData.title||"❌ fehlt"}</td></tr>
+                <tr><td class="px-2 py-1 bg-gray-50">description</td><td>${parsedData.description||"❌ fehlt"}</td></tr>
+                <tr><td class="px-2 py-1 bg-gray-50">keywords</td><td>${parsedData.keywords||"❌ fehlt"}</td></tr>
+                <tr><td class="px-2 py-1 bg-gray-50">canonical</td><td>${parsedData.canonical||"❌ fehlt"}</td></tr>
+                <tr><td class="px-2 py-1 bg-gray-50">robots</td><td>${parsedData.robots||"❌ fehlt"}</td></tr>
+              </tbody>
+            </table>
+          </section>
+        `;
 
         setTimeout(() => overlay.classList.add("hidden"), 500);
       } catch (err) {
