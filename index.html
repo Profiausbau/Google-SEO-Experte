@@ -9,8 +9,7 @@
   <style>
     body { font-family: Arial, sans-serif; }
   </style>
-</head>
-<body class="bg-gray-50 text-gray-800">
+
 <header class="bg-white shadow sticky top-0 z-50">
   <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
     <!-- Logo -->
@@ -28,7 +27,7 @@
     </nav>
 
     <!-- Mobile Button -->
-    <button id="menu-btn" class="md:hidden text-gray-700 focus:outline-none">
+    <button id="menu-btn" class="md:hidden text-3xl text-gray-700 focus:outline-none">
       ☰
     </button>
   </div>
@@ -50,8 +49,18 @@
   const btn = document.getElementById("menu-btn");
   const menu = document.getElementById("mobile-menu");
 
+  // Toggle Menü + Icon ändern
   btn.addEventListener("click", () => {
     menu.classList.toggle("hidden");
+    btn.textContent = menu.classList.contains("hidden") ? "☰" : "✖";
+  });
+
+  // Menü automatisch schließen, wenn Link geklickt wird
+  document.querySelectorAll("#mobile-menu a").forEach(link => {
+    link.addEventListener("click", () => {
+      menu.classList.add("hidden");
+      btn.textContent = "☰";
+    });
   });
 </script>
 
