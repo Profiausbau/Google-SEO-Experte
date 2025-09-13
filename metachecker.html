@@ -2,13 +2,13 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Meta-Checker</title>
+  <title>Meta-Checker – Media Aachen</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .spinner {
       border: 3px solid #f3f3f3;
-      border-top: 3px solid #c62828;
+      border-top: 3px solid #1a365d;
       border-radius: 50%;
       width: 28px;
       height: 28px;
@@ -21,10 +21,10 @@
 <body class="bg-gray-50 text-gray-800 text-base">
 
   <!-- Header -->
-  <header class="bg-[#c62828] text-white shadow">
+  <header class="bg-[#1a365d] text-white shadow">
     <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
       <h1 class="text-lg sm:text-xl font-bold">🔍 Meta-Checker</h1>
-      <a href="/" class="bg-white text-[#c62828] px-4 py-2 rounded-full font-semibold shadow hover:bg-gray-100">⬅️ Zurück</a>
+      <a href="/" class="bg-white text-[#1a365d] px-4 py-2 rounded-full font-semibold shadow hover:bg-gray-100">⬅️ Zurück</a>
     </div>
   </header>
 
@@ -35,9 +35,9 @@
     <!-- Formular -->
     <form id="checker-form" class="flex flex-col sm:flex-row gap-3 mb-8">
       <input type="url" id="url" placeholder="https://example.com"
-        class="flex-1 border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-[#c62828]" required>
+        class="flex-1 border rounded-lg px-4 py-3 shadow-sm focus:ring-2 focus:ring-[#1a365d]" required>
       <button type="submit" id="checkBtn"
-        class="bg-[#c62828] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#a81f1f] transition disabled:opacity-70">
+        class="bg-[#1a365d] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#0f2340] transition disabled:opacity-70">
         <span id="btnText">🚀 Prüfen</span>
       </button>
     </form>
@@ -51,7 +51,7 @@
       <div class="spinner mb-3"></div>
       <p class="text-gray-700 font-semibold mb-4">Wird geladen…</p>
       <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-        <div id="progressBar" class="bg-[#c62828] h-2 w-0"></div>
+        <div id="progressBar" class="bg-[#1a365d] h-2 w-0"></div>
       </div>
     </div>
   </div>
@@ -81,7 +81,7 @@ function calculateSeoScore(data) {
   let score = 0, maxScore = 20;
   if (data.h1.length === 1) score++;
   if (data.h2.length >= 2) score++;
-  if (data.h3.length >= 1 && data.h3.length <= 25) score++; // flexibler
+  if (data.h3.length >= 1 && data.h3.length <= 25) score++;
   if (data.title && data.title.length >= 10 && data.title.length <= 60) score++;
   if (data.description && data.description.length >= 50 && data.description.length <= 160) score++;
   if (data.canonical) score++;
@@ -115,15 +115,45 @@ document.getElementById("checker-form").addEventListener("submit", async (e) => 
   let progressInterval = await animateProgress();
 
   try {
-    // === Backend-Variante ===
-    const res = await fetch(`/meta-checker/api/check?url=${encodeURIComponent(url)}`);
+    // Frontend-only via AllOrigins
+    const res = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+    if (!res.ok) throw new Error("Proxy-Fehler (" + res.status + ")");
     const data = await res.json();
+    const doc = new DOMParser().parseFromString(data.contents, "text/html");
 
-    const seoScore = calculateSeoScore(data);
+    const parsed = {
+      title: doc.querySelector("title")?.innerText || "",
+      description: doc.querySelector("meta[name='description']")?.content || "",
+      canonical: doc.querySelector("link[rel='canonical']")?.href || "",
+      robots: doc.querySelector("meta[name='robots']")?.content || "",
+      author: doc.querySelector("meta[name='author']")?.content || "",
+      ogTitle: doc.querySelector("meta[property='og:title']")?.content || "",
+      ogDescription: doc.querySelector("meta[property='og:description']")?.content || "",
+      ogImage: doc.querySelector("meta[property='og:image']")?.content || "",
+      twitterTitle: doc.querySelector("meta[name='twitter:title']")?.content || "",
+      twitterDescription: doc.querySelector("meta[name='twitter:description']")?.content || "",
+      twitterImage: doc.querySelector("meta[name='twitter:image']")?.content || "",
+      h1: [...doc.querySelectorAll("h1")].map(h => h.innerText),
+      h2: [...doc.querySelectorAll("h2")].map(h => h.innerText),
+      h3: [...doc.querySelectorAll("h3")].map(h => h.innerText),
+      bold: [...doc.querySelectorAll("b,strong")].map(b => b.innerText),
+      images: {
+        total: doc.querySelectorAll("img").length,
+        withAlt: [...doc.querySelectorAll("img")].filter(i => i.alt).length
+      },
+      links: {
+        total: doc.querySelectorAll("a").length,
+        internal: [...doc.querySelectorAll("a")].filter(a => new URL(a.href, url).hostname === new URL(url).hostname).length,
+        external: [...doc.querySelectorAll("a")].filter(a => new URL(a.href, url).hostname !== new URL(url).hostname).length
+      },
+      wordCount: doc.body.innerText.split(/\s+/).filter(Boolean).length
+    };
+
+    const seoScore = calculateSeoScore(parsed);
     const circleRadius = 50;
     const circumference = 2 * Math.PI * circleRadius;
     const offset = circumference - (seoScore / 100) * circumference;
-    const color = seoScore>=80 ? '#16a34a' : seoScore>=50 ? '#facc15' : '#dc2626';
+    const color = seoScore>=80 ? '#16a34a' : seoScore>=50 ? '#f59e0b' : '#dc2626';
 
     document.getElementById("results").innerHTML = `
       <section class="bg-white p-6 shadow rounded-lg">
@@ -141,24 +171,24 @@ document.getElementById("checker-form").addEventListener("submit", async (e) => 
       <section class="bg-white p-6 shadow rounded-lg">
         <h2 class="text-xl font-bold mb-4">🔎 Struktur-Analyse</h2>
         <ul class="list-disc pl-6 space-y-1">
-          <li>${checkCount("H1", data.h1.length,1,1)}</li>
-          <li>${checkCount("H2", data.h2.length,2,null)}</li>
-          <li>${checkCount("H3", data.h3.length,1,25)}</li>
-          <li>${checkCount("Fette Wörter", data.bold.length,3,20)}</li>
-          <li>Bilder: ${data.images.withAlt}/${data.images.total} mit ALT</li>
-          <li>Wörter im Text: ${data.wordCount}</li>
+          <li>${checkCount("H1", parsed.h1.length,1,1)}</li>
+          <li>${checkCount("H2", parsed.h2.length,2,null)}</li>
+          <li>${checkCount("H3", parsed.h3.length,1,25)}</li>
+          <li>${checkCount("Fette Wörter", parsed.bold.length,3,20)}</li>
+          <li>Bilder: ${parsed.images.withAlt}/${parsed.images.total} mit ALT</li>
+          <li>Wörter im Text: ${parsed.wordCount}</li>
         </ul>
       </section>
 
       <section class="bg-white p-6 shadow rounded-lg">
         <h2 class="text-xl font-bold mb-4">📑 Meta-Daten</h2>
-        <p><b>Title:</b> ${data.title} (${checkLength(data.title,10,60)})</p>
-        <p><b>Description:</b> ${data.description} (${checkLength(data.description,50,160)})</p>
-        <p><b>Canonical:</b> ${data.canonical||"❌ fehlt"}</p>
-        <p><b>Robots:</b> ${data.robots||"❌ fehlt"}</p>
-        <p><b>Author:</b> ${data.author||"❌ fehlt"}</p>
-        <p><b>OG Image:</b> ${data.ogImage||"❌ fehlt"}</p>
-        <p><b>Twitter Image:</b> ${data.twitterImage||"❌ fehlt"}</p>
+        <p><b>Title:</b> ${parsed.title} (${checkLength(parsed.title,10,60)})</p>
+        <p><b>Description:</b> ${parsed.description} (${checkLength(parsed.description,50,160)})</p>
+        <p><b>Canonical:</b> ${parsed.canonical||"❌ fehlt"}</p>
+        <p><b>Robots:</b> ${parsed.robots||"❌ fehlt"}</p>
+        <p><b>Author:</b> ${parsed.author||"❌ fehlt"}</p>
+        <p><b>OG Image:</b> ${parsed.ogImage||"❌ fehlt"}</p>
+        <p><b>Twitter Image:</b> ${parsed.twitterImage||"❌ fehlt"}</p>
       </section>
 
       <section class="bg-white p-6 shadow rounded-lg">
@@ -166,15 +196,15 @@ document.getElementById("checker-form").addEventListener("submit", async (e) => 
         <div class="grid md:grid-cols-2 gap-6">
           <div class="border rounded shadow p-3">
             <h3 class="font-semibold mb-2">Facebook / LinkedIn</h3>
-            <img src="${data.ogImage||'https://via.placeholder.com/200x120'}" class="mb-2"/>
-            <p class="font-bold">${data.ogTitle||data.title||'Kein Titel'}</p>
-            <p>${data.ogDescription||data.description||'Keine Beschreibung'}</p>
+            <img src="${parsed.ogImage||'https://via.placeholder.com/200x120'}" class="mb-2"/>
+            <p class="font-bold">${parsed.ogTitle||parsed.title||'Kein Titel'}</p>
+            <p>${parsed.ogDescription||parsed.description||'Keine Beschreibung'}</p>
           </div>
           <div class="border rounded shadow p-3">
             <h3 class="font-semibold mb-2">Twitter / X</h3>
-            <img src="${data.twitterImage||'https://via.placeholder.com/200x120'}" class="mb-2"/>
-            <p class="font-bold">${data.twitterTitle||data.title||'Kein Titel'}</p>
-            <p>${data.twitterDescription||data.description||'Keine Beschreibung'}</p>
+            <img src="${parsed.twitterImage||'https://via.placeholder.com/200x120'}" class="mb-2"/>
+            <p class="font-bold">${parsed.twitterTitle||parsed.title||'Kein Titel'}</p>
+            <p>${parsed.twitterDescription||parsed.description||'Keine Beschreibung'}</p>
           </div>
         </div>
       </section>
@@ -182,19 +212,19 @@ document.getElementById("checker-form").addEventListener("submit", async (e) => 
       <section>
         <h2 class="text-xl font-bold mt-6 mb-2">📋 Use your Meta-Tags</h2>
         <pre id="metaCode" class="bg-gray-100 p-4 rounded">${`
-<title>${data.title||''}</title>
-<meta name="description" content="${data.description||''}">
-<meta property="og:title" content="${data.ogTitle||data.title||''}">
-<meta property="og:description" content="${data.ogDescription||data.description||''}">
-<meta property="og:image" content="${data.ogImage||''}">
-<meta name="twitter:title" content="${data.twitterTitle||data.title||''}">
-<meta name="twitter:description" content="${data.twitterDescription||data.description||''}">
-<meta name="twitter:image" content="${data.twitterImage||''}">
-<link rel="canonical" href="${data.canonical||url}">
-<meta name="robots" content="${data.robots||''}">
-<meta name="author" content="${data.author||''}">
+<title>${parsed.title||''}</title>
+<meta name="description" content="${parsed.description||''}">
+<meta property="og:title" content="${parsed.ogTitle||parsed.title||''}">
+<meta property="og:description" content="${parsed.ogDescription||parsed.description||''}">
+<meta property="og:image" content="${parsed.ogImage||''}">
+<meta name="twitter:title" content="${parsed.twitterTitle||parsed.title||''}">
+<meta name="twitter:description" content="${parsed.twitterDescription||parsed.description||''}">
+<meta name="twitter:image" content="${parsed.twitterImage||''}">
+<link rel="canonical" href="${parsed.canonical||url}">
+<meta name="robots" content="${parsed.robots||''}">
+<meta name="author" content="${parsed.author||''}">
         `}</pre>
-        <button onclick="copyMeta()" class="mt-2 bg-[#c62828] text-white px-4 py-2 rounded">📋 Kopieren</button>
+        <button onclick="copyMeta()" class="mt-2 bg-[#1a365d] text-white px-4 py-2 rounded">📋 Kopieren</button>
       </section>
     `;
 
