@@ -353,33 +353,38 @@
 
   <!-- Kontakt -->
   <section id="kontakt" class="py-20 bg-white">
-    <div class="max-w-4xl mx-auto px-6">
-      <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
-      <div class="bg-gray-50 shadow rounded-2xl p-8 space-y-6 text-center">
-        <p class="text-lg">📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a></p>
-        <p class="text-lg">✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a></p>
+  <div class="max-w-4xl mx-auto px-6">
+    <h3 class="text-3xl font-bold text-center mb-8">Kontakt aufnehmen</h3>
+    <div class="bg-gray-50 shadow rounded-2xl p-8 space-y-6 text-center">
+      <p class="text-lg">
+        📞 <a href="tel:+491735923748" class="text-blue-600 font-semibold hover:underline">0173 5923748</a>
+      </p>
+      <p class="text-lg">
+        ✉️ <a href="mailto:info@media-aachen.de" class="text-blue-600 font-semibold hover:underline">info@media-aachen.de</a>
+      </p>
 
-        <!-- Formular mit mailto -->
-<form action="kontakt.php" method="POST" class="mt-8 space-y-4">
-  <label for="name" class="sr-only">Ihr Name</label>
-  <input id="name" type="text" name="name" placeholder="Ihr Name" required class="w-full p-3 border rounded-lg">
+      <!-- Kontaktformular -->
+      <form action="kontakt.php" method="POST" class="mt-8 space-y-4">
+        <label for="name" class="sr-only">Ihr Name</label>
+        <input id="name" type="text" name="name" placeholder="Ihr Name" required class="w-full p-3 border rounded-lg">
 
-  <label for="email" class="sr-only">Ihre E-Mail</label>
-  <input id="email" type="email" name="email" placeholder="Ihre E-Mail" required class="w-full p-3 border rounded-lg">
+        <label for="email" class="sr-only">Ihre E-Mail</label>
+        <input id="email" type="email" name="email" placeholder="Ihre E-Mail" required class="w-full p-3 border rounded-lg">
 
-  <label for="message" class="sr-only">Ihre Nachricht</label>
-  <textarea id="message" name="nachricht" rows="5" placeholder="Ihre Nachricht" required class="w-full p-3 border rounded-lg"></textarea>
+        <label for="message" class="sr-only">Ihre Nachricht</label>
+        <textarea id="message" name="nachricht" rows="5" placeholder="Ihre Nachricht" required class="w-full p-3 border rounded-lg"></textarea>
 
-  <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
-    Absenden
-  </button>
-</form>
+        <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 transition">
+          Absenden
+        </button>
+      </form>
+
       <p class="text-sm text-gray-500 mt-4">
         🔒 Ihre Daten werden nur zur Bearbeitung Ihrer Anfrage genutzt.
       </p>
     </div>
   </div>
-  </section>
+</section>
 
   <!-- Footer -->
   <footer class="bg-gray-900 text-white py-6">
